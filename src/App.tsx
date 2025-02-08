@@ -14,10 +14,25 @@ const getRandomColor = (exclude?: string) => {
   return availableColors[Math.floor(Math.random() * availableColors.length)];
 };
 
+const hslToHex = (h: number, s: number, l: number) => {
+  l /= 100;
+  const a = (s * Math.min(l, 1 - l)) / 100;
+  const f = (n: number) => {
+    const k = (n + h / 30) % 12;
+    const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+    return Math.round(255 * color)
+      .toString(16)
+      .padStart(2, "0");
+  };
+  return `#${f(0)}${f(8)}${f(4)}`;
+};
+
 export default function App() {
   const [bgColor, setBgColor] = useState(() => getRandomColor());
   const [buttonColor, setButtonColor] = useState(() => getRandomColor(bgColor));
   const [debugInfo, setDebugInfo] = useState({ pressTime: 0 });
+  const [hexCode, setHexCode] = useState<string[]>([]);
+  const [isAnimating, setIsAnimating] = useState(false);
   const circleRef = useRef<HTMLDivElement>(null);
   const pressStartTime = useRef<number | null>(null);
   const animationFrameId = useRef<number | null>(null);
@@ -29,7 +44,22 @@ export default function App() {
     const hue = (baseHue + randomOffset + 360) % 360;
     const saturation = 80 + Math.random() * 20; // Random saturation between 80% and 100%
     const lightness = 40 + Math.random() * 20; // Random lightness between 40% and 60%
-    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+    return hslToHex(hue, saturation, lightness);
+  }, []);
+
+  const animateHexCode = useCallback((color: string) => {
+    setIsAnimating(true);
+    const hex = color.startsWith("#") ? color : `#${color}`;
+    const parts = ["#", hex.slice(1, 3), hex.slice(3, 5), hex.slice(5)];
+    setHexCode([]);
+    parts.forEach((part, index) => {
+      setTimeout(() => {
+        setHexCode((prev) => [...prev, part.toUpperCase()]);
+        if (index === parts.length - 1) {
+          setTimeout(() => setIsAnimating(false), 500); // Allow interaction after last part is shown
+        }
+      }, index * 500);
+    });
   }, []);
 
   const updateButtonColor = useCallback(() => {
@@ -49,6 +79,7 @@ export default function App() {
 
   const handleInteractionStart = useCallback(
     (e: React.MouseEvent | React.TouchEvent) => {
+      if (isAnimating) return; // Prevent interaction while animating
       e.preventDefault();
       isPressing.current = true;
       pressStartTime.current = Date.now();
@@ -57,17 +88,19 @@ export default function App() {
       }
       updateButtonColor();
     },
-    [updateButtonColor]
+    [updateButtonColor, isAnimating]
   );
 
   const handleInteractionEnd = useCallback(
     (e: React.MouseEvent | React.TouchEvent) => {
+      if (isAnimating) return; // Prevent interaction while animating
       e.preventDefault();
       isPressing.current = false;
       if (pressStartTime.current) {
         const duration = Date.now() - pressStartTime.current;
         const color = generateColor(duration);
         setBgColor(color);
+        animateHexCode(color);
 
         // Create ripple effect on release
         const circle = circleRef.current;
@@ -97,10 +130,8 @@ export default function App() {
         cancelAnimationFrame(animationFrameId.current);
         animationFrameId.current = null;
       }
-      // setButtonColor("red");
-      // setDebugInfo({ hex: "#000000", pressTime: 0 });
     },
-    [generateColor]
+    [generateColor, animateHexCode, isAnimating]
   );
 
   useEffect(() => {
@@ -142,13 +173,27 @@ export default function App() {
 
   return (
     <main className={styles.main} style={{ backgroundColor: bgColor }}>
-      <div
-        ref={circleRef}
-        className={`${styles.circle} ${
-          isPressing.current ? styles.pressed : ""
-        }`}
-        style={{ backgroundColor: buttonColor }}
-      ></div>
+      <div className={styles.hexCodeWrapper}>
+        {hexCode.length > 0 && (
+          <div className={styles.hexCodeContainer}>
+            {hexCode.map((part, index) => (
+              <div
+                key={index}
+                className={`${styles.hexCodePart} ${styles.slideIn}`}
+              >
+                {part}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      <div className={styles.circleWrapper}>
+        <div
+          ref={circleRef}
+          className={`${styles.circle} ${isAnimating ? styles.disabled : ""}`}
+          style={{ backgroundColor: buttonColor }}
+        ></div>
+      </div>
       {showDebug && (
         <div className={styles.debug}>
           <p>Background Color: {bgColor}</p>
