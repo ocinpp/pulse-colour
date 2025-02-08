@@ -2,12 +2,22 @@
 
 import type React from "react";
 import { useState, useCallback, useRef, useEffect } from "react";
-import "./App.css";
+import styles from "./App.module.css";
+
+const colorPalette = ["#00aba9", "#ff0097", "#a200ff", "#1ba1e2", "#f09609"];
+const showDebug = false;
+
+const getRandomColor = (exclude?: string) => {
+  const availableColors = exclude
+    ? colorPalette.filter((color) => color !== exclude)
+    : colorPalette;
+  return availableColors[Math.floor(Math.random() * availableColors.length)];
+};
 
 export default function App() {
-  const [bgColor, setBgColor] = useState("white");
-  const [buttonColor, setButtonColor] = useState("red");
-  const [debugInfo, setDebugInfo] = useState({ hex: "#FF0000", pressTime: 0 });
+  const [bgColor, setBgColor] = useState(() => getRandomColor());
+  const [buttonColor, setButtonColor] = useState(() => getRandomColor(bgColor));
+  const [debugInfo, setDebugInfo] = useState({ pressTime: 0 });
   const circleRef = useRef<HTMLDivElement>(null);
   const pressStartTime = useRef<number | null>(null);
   const animationFrameId = useRef<number | null>(null);
@@ -28,7 +38,6 @@ export default function App() {
       const color = generateColor(duration);
       setButtonColor(color);
       setDebugInfo({
-        hex: color,
         pressTime: duration,
       });
     }
@@ -72,7 +81,7 @@ export default function App() {
             rect.top;
 
           const ripple = document.createElement("div");
-          ripple.className = "ripple";
+          ripple.className = styles.ripple;
           ripple.style.left = `${x}px`;
           ripple.style.top = `${y}px`;
 
@@ -88,8 +97,8 @@ export default function App() {
         cancelAnimationFrame(animationFrameId.current);
         animationFrameId.current = null;
       }
-      setButtonColor("red");
-      setDebugInfo({ hex: "#FF0000", pressTime: 0 });
+      // setButtonColor("red");
+      // setDebugInfo({ hex: "#000000", pressTime: 0 });
     },
     [generateColor]
   );
@@ -132,16 +141,21 @@ export default function App() {
   }, [handleInteractionStart, handleInteractionEnd]);
 
   return (
-    <main className="main" style={{ backgroundColor: bgColor }}>
+    <main className={styles.main} style={{ backgroundColor: bgColor }}>
       <div
         ref={circleRef}
-        className={`circle ${isPressing.current ? "pressed" : ""}`}
+        className={`${styles.circle} ${
+          isPressing.current ? styles.pressed : ""
+        }`}
         style={{ backgroundColor: buttonColor }}
       ></div>
-      <div className="debug">
-        {/* <p>Button Color: {debugInfo.hex}</p> */}
-        <p>Press Time: {debugInfo.pressTime}ms</p>
-      </div>
+      {showDebug && (
+        <div className={styles.debug}>
+          <p>Background Color: {bgColor}</p>
+          <p>Button Color: {buttonColor}</p>
+          <p>Press Time: {debugInfo.pressTime}ms</p>
+        </div>
+      )}
     </main>
   );
 }
