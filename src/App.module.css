@@ -82,6 +82,13 @@
   padding: 10px;
 }
 
+.hexCodeDescription {
+  font-size: 48px;
+  opacity: 0;
+  transform: translateX(-20px);
+  color: white;
+}
+
 .hexCodePart {
   font-size: 48px;
   opacity: 0;
@@ -89,8 +96,12 @@
   color: white;
 }
 
-.slideIn {
+.slideIn1 {
   animation: slideIn 0.5s forwards;
+}
+
+.slideIn2 {
+  animation: slideIn 1s forwards;
 }
 
 @keyframes slideIn {
@@ -123,7 +134,11 @@
     height: 150px;
   }
 
+  .hexCodeDescription {
+    font-size: 36px;
+  }
+
   .hexCodePart {
-    font-size: 56px;
+    font-size: 36px;
   }
 }

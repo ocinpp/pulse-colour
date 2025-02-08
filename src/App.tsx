@@ -58,7 +58,7 @@ export default function App() {
         if (index === parts.length - 1) {
           setTimeout(() => setIsAnimating(false), 500); // Allow interaction after last part is shown
         }
-      }, index * 500);
+      }, (index + 1) * 700);
     });
   }, []);
 
@@ -176,14 +176,20 @@ export default function App() {
       <div className={styles.hexCodeWrapper}>
         {hexCode.length > 0 && (
           <div className={styles.hexCodeContainer}>
-            {hexCode.map((part, index) => (
+            <div className={`${styles.hexCodeDescription} ${styles.slideIn1}`}>
+              Your colour is
+            </div>
+            {/* {hexCode.map((part, index) => (
               <div
                 key={index}
                 className={`${styles.hexCodePart} ${styles.slideIn}`}
               >
                 {part}
               </div>
-            ))}
+            ))} */}
+            <div className={`${styles.hexCodePart} ${styles.slideIn2}`}>
+              {hexCode}
+            </div>
           </div>
         )}
       </div>
