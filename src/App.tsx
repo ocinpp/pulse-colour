@@ -72,6 +72,13 @@ export default function App() {
       });
     }
 
+    // Force repaint for Safari
+    if (circleRef.current) {
+      circleRef.current.style.display = "none";
+      circleRef.current.offsetHeight; // Trigger a reflow
+      circleRef.current.style.display = "";
+    }
+
     if (isPressing.current) {
       animationFrameId.current = requestAnimationFrame(updateButtonColor);
     }
