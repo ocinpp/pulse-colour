@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "color-name-list": "^11.0.0",
+    "eslint-plugin-react": "^7.37.4",
     "nearest-color": "^0.4.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
