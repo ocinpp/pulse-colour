@@ -30,12 +30,16 @@ const hslToHex = (h: number, s: number, l: number) => {
 };
 
 // Function to get color name from hex code
+// Will get the nearest color name if the exact match is not found
 const getColorName = (hexCode: string) => {
   const exactMatch = colornames.find(
     (color) => color.hex.toLowerCase() === hexCode.toLowerCase()
   );
   if (exactMatch) {
-    return exactMatch.name;
+    return {
+      name: exactMatch.name,
+      hex: hexCode,
+    };
   }
 
   const namedColors = colornames.reduce(
@@ -44,7 +48,11 @@ const getColorName = (hexCode: string) => {
   );
   const nearest = nearestColor.from(namedColors);
   const nearestMatch = nearest(hexCode);
-  return `~${nearestMatch?.name || "Unknown"}`;
+
+  return {
+    name: `~${nearestMatch?.name || "Unknown"}`,
+    hex: nearestMatch?.value || hexCode,
+  };
 };
 
 export default function App() {
@@ -74,13 +82,20 @@ export default function App() {
     setShowHexCode(true);
     setHexCode([]);
     const colorNameResult = getColorName(color);
+    const colorNameResultHex = colorNameResult.hex;
+
     setColorName(
-      colorNameResult.startsWith("~")
-        ? colorNameResult.slice(1)
-        : colorNameResult
+      colorNameResult.name.startsWith("~")
+        ? colorNameResult.name.slice(1)
+        : colorNameResult.name
     );
 
-    const parts = ["#", color.slice(1, 3), color.slice(3, 5), color.slice(5)];
+    const parts = [
+      "#",
+      colorNameResultHex.slice(1, 3),
+      colorNameResultHex.slice(3, 5),
+      colorNameResultHex.slice(5),
+    ];
     parts.forEach((part, index) => {
       setTimeout(() => {
         setHexCode((prev) => [...prev, part.toUpperCase()]);
