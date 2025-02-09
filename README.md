@@ -66,7 +66,7 @@ Pulse Color App is an interactive web application that generates and displays co
 2. Press and hold the circle to generate a color. The longer you hold, the more the color will change.
 3. Release the circle to set the background to the generated color.
 4. The color's name and hex code will appear at the top of the screen.
-5. If the exact color name isn't found, an approximate name will be shown, prefixed with "~".
+5. If the exact color name isn't found, an approximate name and the corresponding hex code will be shown.
 
 ## Project Structure
 

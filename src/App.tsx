@@ -50,7 +50,7 @@ const getColorName = (hexCode: string) => {
   const nearestMatch = nearest(hexCode);
 
   return {
-    name: `~${nearestMatch?.name || "Unknown"}`,
+    name: `${nearestMatch?.name || "Unknown"}`,
     hex: nearestMatch?.value || hexCode,
   };
 };
@@ -84,11 +84,7 @@ export default function App() {
     const colorNameResult = getColorName(color);
     const colorNameResultHex = colorNameResult.hex;
 
-    setColorName(
-      colorNameResult.name.startsWith("~")
-        ? colorNameResult.name.slice(1)
-        : colorNameResult.name
-    );
+    setColorName(colorNameResult.name);
 
     const parts = [
       "#",
@@ -229,10 +225,7 @@ export default function App() {
         {showHexCode && (
           <div className={styles.hexCodeContainer}>
             <div className={`${styles.hexCodeDescription} ${styles.slideIn1}`}>
-              <span className={styles.colorName}>
-                {colorName.startsWith("~") ? "~" : ""}
-                {colorName.replace(/^~/, "")}
-              </span>
+              <span className={styles.colorName}>{colorName}</span>
             </div>
             <div className={styles.hexCodeParts}>
               {hexCode.map((part, index) => (
