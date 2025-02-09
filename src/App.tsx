@@ -32,6 +32,7 @@ export default function App() {
   const [buttonColor, setButtonColor] = useState(() => getRandomColor(bgColor));
   const [debugInfo, setDebugInfo] = useState({ pressTime: 0 });
   const [hexCode, setHexCode] = useState<string[]>([]);
+  const [showHexCode, setShowHexCode] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const circleRef = useRef<HTMLDivElement>(null);
   const pressStartTime = useRef<number | null>(null);
@@ -49,16 +50,17 @@ export default function App() {
 
   const animateHexCode = useCallback((color: string) => {
     setIsAnimating(true);
-    const hex = color.startsWith("#") ? color : `#${color}`;
-    const parts = ["#", hex.slice(1, 3), hex.slice(3, 5), hex.slice(5)];
+    setShowHexCode(true);
     setHexCode([]);
+
+    const parts = ["#", color.slice(1, 3), color.slice(3, 5), color.slice(5)];
     parts.forEach((part, index) => {
       setTimeout(() => {
         setHexCode((prev) => [...prev, part.toUpperCase()]);
         if (index === parts.length - 1) {
-          setTimeout(() => setIsAnimating(false), 500); // Allow interaction after last part is shown
+          setTimeout(() => setIsAnimating(false), 500);
         }
-      }, (index + 1) * 700);
+      }, (index + 1) * 500);
     });
   }, []);
 
@@ -88,6 +90,7 @@ export default function App() {
     (e: React.MouseEvent | React.TouchEvent) => {
       if (isAnimating) return; // Prevent interaction while animating
       e.preventDefault();
+      setShowHexCode(false);
       isPressing.current = true;
       pressStartTime.current = Date.now();
       if (animationFrameId.current) {
@@ -181,21 +184,20 @@ export default function App() {
   return (
     <main className={styles.main} style={{ backgroundColor: bgColor }}>
       <div className={styles.hexCodeWrapper}>
-        {hexCode.length > 0 && (
+        {showHexCode && (
           <div className={styles.hexCodeContainer}>
             <div className={`${styles.hexCodeDescription} ${styles.slideIn1}`}>
-              Your colour is
+              The colour is
             </div>
-            {/* {hexCode.map((part, index) => (
-              <div
-                key={index}
-                className={`${styles.hexCodePart} ${styles.slideIn}`}
-              >
-                {part}
-              </div>
-            ))} */}
-            <div className={`${styles.hexCodePart} ${styles.slideIn2}`}>
-              {hexCode}
+            <div className={styles.hexCodeParts}>
+              {hexCode.map((part, index) => (
+                <span
+                  key={index}
+                  className={`${styles.hexCodePart} ${styles.slideIn1}`}
+                >
+                  {part}
+                </span>
+              ))}
             </div>
           </div>
         )}

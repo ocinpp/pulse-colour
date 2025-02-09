@@ -32,7 +32,6 @@
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  /* background-color: red; */
   cursor: pointer;
   position: relative;
   transition: all 0.3s ease;
@@ -90,6 +89,11 @@
   color: white;
 }
 
+.hexCodeParts {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .hexCodePart {
   font-size: 48px;
   opacity: 0;
@@ -101,9 +105,21 @@
   animation: slideIn 0.5s forwards;
 }
 
-.slideIn2 {
-  animation: slideIn 1s forwards;
+/* .slideIn2 {
+  animation: slideIn 0.5s 0.5s forwards;
 }
+
+.slideIn3 {
+  animation: slideIn 0.5s 0.5s forwards;
+}
+
+.slideIn4 {
+  animation: slideIn 0.5s 0.5s forwards;
+}
+
+.slideIn5 {
+  animation: slideIn 0.5s 0.5s forwards;
+} */
 
 @keyframes slideIn {
   to {
@@ -136,10 +152,10 @@
   }
 
   .hexCodeDescription {
-    font-size: 36px;
+    font-size: 40px;
   }
 
   .hexCodePart {
-    font-size: 36px;
+    font-size: 40px;
   }
 }
