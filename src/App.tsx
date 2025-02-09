@@ -44,7 +44,7 @@ const getColorName = (hexCode: string) => {
   );
   const nearest = nearestColor.from(namedColors);
   const nearestMatch = nearest(hexCode);
-  return `~${nearestMatch.name}`;
+  return `~${nearestMatch?.name || "Unknown"}`;
 };
 
 export default function App() {
