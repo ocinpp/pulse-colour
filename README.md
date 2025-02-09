@@ -32,28 +32,31 @@ Pulse Color App is an interactive web application that generates and displays co
 ### Installation
 
 1. Clone the repository:
-   \`\`\`
+
+   ```
    git clone <https://github.com/your-username/pulse-color-app.git>
    cd pulse-color-app
-   \`\`\`
+   ```
 
 2. Install dependencies:
-   \`\`\`
+
+   ```
    npm install
-   \`\`\`
+   ```
    or
-   \`\`\`
+   ```
    yarn install
-   \`\`\`
+   ```
 
 3. Run the development server:
-   \`\`\`
+
+   ```
    npm run dev
-   \`\`\`
+   ```
    or
-   \`\`\`
+   ```
    yarn dev
-   \`\`\`
+   ```
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the app.
 
@@ -67,18 +70,18 @@ Pulse Color App is an interactive web application that generates and displays co
 
 ## Project Structure
 
-- \`app/\`: Contains the main application files
-  - \`layout.tsx\`: Defines the overall layout of the app
-  - \`page.tsx\`: Main component with the color generation logic
-  - \`page.module.css\`: Styles for the main component
-  - \`globals.css\`: Global styles
-- \`public/\`: Public assets (if any)
+- `app/`: Contains the main application files
+  - `layout.tsx`: Defines the overall layout of the app
+  - `page.tsx`: Main component with the color generation logic
+  - `page.module.css`: Styles for the main component
+  - `globals.css`: Global styles
+- `public/`: Public assets (if any)
 
 ## Customization
 
-- To change the initial color palette, modify the \`colorPalette\` array in \`app/page.tsx\`.
-- Adjust the color generation algorithm in the \`generateColor\` function in \`app/page.tsx\`.
-- Modify styles in \`app/page.module.css\` to change the appearance of the app.
+- To change the initial color palette, modify the `colorPalette` array in `app/page.tsx`.
+- Adjust the color generation algorithm in the `generateColor` function in `app/page.tsx`.
+- Modify styles in `app/page.module.css` to change the appearance of the app.
 
 ## Contributing
 
