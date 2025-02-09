@@ -11,7 +11,7 @@
 }
 
 .hexCodeWrapper {
-  position: absolute;
+  /* position: absolute; */
   top: 20px;
   left: 20px;
   z-index: 10;
@@ -80,6 +80,7 @@
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 10px;
   padding: 10px;
+  user-select: none;
 }
 
 .hexCodeDescription {
@@ -87,6 +88,16 @@
   opacity: 0;
   transform: translateX(-20px);
   color: white;
+}
+
+.colorName {
+  font-style: italic;
+}
+
+.colorName::before {
+  content: attr(data-prefix);
+  font-style: normal;
+  margin-right: 2px;
 }
 
 .hexCodeParts {
@@ -99,27 +110,12 @@
   opacity: 0;
   transform: translateX(-20px);
   color: white;
+  /* margin-right: 5px; */
 }
 
 .slideIn1 {
   animation: slideIn 0.5s forwards;
 }
-
-/* .slideIn2 {
-  animation: slideIn 0.5s 0.5s forwards;
-}
-
-.slideIn3 {
-  animation: slideIn 0.5s 0.5s forwards;
-}
-
-.slideIn4 {
-  animation: slideIn 0.5s 0.5s forwards;
-}
-
-.slideIn5 {
-  animation: slideIn 0.5s 0.5s forwards;
-} */
 
 @keyframes slideIn {
   to {

@@ -3,6 +3,8 @@
 import type React from "react";
 import { useState, useCallback, useRef, useEffect } from "react";
 import styles from "./App.module.css";
+import { colornames } from "color-name-list";
+import nearestColor from "nearest-color";
 
 const colorPalette = ["#00aba9", "#ff0097", "#a200ff", "#1ba1e2", "#f09609"];
 const showDebug = false;
@@ -27,11 +29,30 @@ const hslToHex = (h: number, s: number, l: number) => {
   return `#${f(0)}${f(8)}${f(4)}`;
 };
 
+// Function to get color name from hex code
+const getColorName = (hexCode: string) => {
+  const exactMatch = colornames.find(
+    (color) => color.hex.toLowerCase() === hexCode.toLowerCase()
+  );
+  if (exactMatch) {
+    return exactMatch.name;
+  }
+
+  const namedColors = colornames.reduce(
+    (o, { name, hex }) => Object.assign(o, { [name]: hex }),
+    {}
+  );
+  const nearest = nearestColor.from(namedColors);
+  const nearestMatch = nearest(hexCode);
+  return `~${nearestMatch.name}`;
+};
+
 export default function App() {
   const [bgColor, setBgColor] = useState(() => getRandomColor());
   const [buttonColor, setButtonColor] = useState(() => getRandomColor(bgColor));
   const [debugInfo, setDebugInfo] = useState({ pressTime: 0 });
   const [hexCode, setHexCode] = useState<string[]>([]);
+  const [colorName, setColorName] = useState<string>("");
   const [showHexCode, setShowHexCode] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const circleRef = useRef<HTMLDivElement>(null);
@@ -52,6 +73,12 @@ export default function App() {
     setIsAnimating(true);
     setShowHexCode(true);
     setHexCode([]);
+    const colorNameResult = getColorName(color);
+    setColorName(
+      colorNameResult.startsWith("~")
+        ? colorNameResult.slice(1)
+        : colorNameResult
+    );
 
     const parts = ["#", color.slice(1, 3), color.slice(3, 5), color.slice(5)];
     parts.forEach((part, index) => {
@@ -187,7 +214,11 @@ export default function App() {
         {showHexCode && (
           <div className={styles.hexCodeContainer}>
             <div className={`${styles.hexCodeDescription} ${styles.slideIn1}`}>
-              The colour is
+              The colour is{" "}
+              <span className={styles.colorName}>
+                {colorName.startsWith("~") ? "~" : ""}
+                {colorName.replace(/^~/, "")}
+              </span>
             </div>
             <div className={styles.hexCodeParts}>
               {hexCode.map((part, index) => (
