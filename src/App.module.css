@@ -11,10 +11,9 @@
 }
 
 .hexCodeWrapper {
-  /* position: absolute; */
   top: 20px;
-  left: 20px;
   z-index: 10;
+  width: 100%;
 }
 
 .circleWrapper {
@@ -91,7 +90,7 @@
 }
 
 .colorName {
-  font-style: italic;
+  /* font-style: italic; */
 }
 
 .colorName::before {
@@ -148,10 +147,10 @@
   }
 
   .hexCodeDescription {
-    font-size: 40px;
+    font-size: 36px;
   }
 
   .hexCodePart {
-    font-size: 40px;
+    font-size: 36px;
   }
 }

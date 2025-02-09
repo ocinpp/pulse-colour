@@ -214,7 +214,6 @@ export default function App() {
         {showHexCode && (
           <div className={styles.hexCodeContainer}>
             <div className={`${styles.hexCodeDescription} ${styles.slideIn1}`}>
-              The colour is{" "}
               <span className={styles.colorName}>
                 {colorName.startsWith("~") ? "~" : ""}
                 {colorName.replace(/^~/, "")}
